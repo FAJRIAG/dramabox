@@ -176,7 +176,7 @@ app.use((_req: Request, res: Response) => {
     });
 });
 
-app.listen(port, () => {
+app.listen(port as number, '0.0.0.0', () => {
     console.log(`\n========================================`);
     console.log(`  Jridev Dramabox API Server is LIVE!`);
     console.log(`========================================`);
