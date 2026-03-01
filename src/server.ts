@@ -39,9 +39,7 @@ const handleRequest = async (res: Response, scraperPromise: Promise<any>) => {
 
 // ── ROUTES ──────────────────────────────────────────────────────────────
 
-// Fast API Key Config
-const FAST_API_KEY = process.env.FAST_API_KEY || 'jridev-fast-777';
-
+// Root / Health Check
 const apiDocHTML = `
 <!DOCTYPE html>
 <html lang="id">
@@ -69,10 +67,6 @@ const apiDocHTML = `
 <body>
     <h1>🎬 API Jridev Dramabox <span class="badge">v1.2 Swagger</span></h1>
     <p>Selamat datang di Server API Publik Jridev Dramabox. Server ini menyediakan aliran data langsung dari database untuk film dan episode pendek secara <i>real-time</i>.</p>
-
-    <div class="alert">
-        ⚠️ <strong>Sistem Keamanan Aktif:</strong> Setiap pemanggilan tautan (endpoint) di bawah ini DIWAJIBKAN menambahkan parameter <code>?apikey=jridev-fast-777</code> di URL Anda.
-    </div>
 
     <h2>🌟 Dokumentasi Endpoints /dramabox</h2>
     
@@ -149,21 +143,6 @@ app.get('/', (_req: Request, res: Response) => {
 
 app.get('/api', (_req: Request, res: Response) => {
     res.send(apiDocHTML);
-});
-
-// Middleware Fast API Key (Diterapkan ke semua rute di bawah baris ini)
-app.use((req: Request, res: Response, next: express.NextFunction) => {
-    const providedKey = req.query.apikey;
-
-    if (!providedKey || providedKey !== FAST_API_KEY) {
-        res.status(401).json({
-            success: false,
-            message: 'API Key Tidak Valid atau Kosong. Harap sertakan ?apikey=jridev-fast-777 di setiap request Anda.'
-        });
-        return;
-    }
-
-    next();
 });
 
 app.get('/api/ping', (_req: Request, res: Response) => {
@@ -372,6 +351,6 @@ app.listen(Number(port), "0.0.0.0", () => {
     console.log("========================================");
     console.log("🚀 Server running on port " + port);
     console.log("👉 URL: http://localhost:" + port + "/");
-    console.log("👉 Test: http://localhost:" + port + "/dramabox/foryou?apikey=" + FAST_API_KEY);
+    console.log("👉 Test: http://localhost:" + port + "/dramabox/foryou");
     console.log("========================================\n");
 });
