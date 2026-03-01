@@ -533,8 +533,9 @@ app.get('/dramabox/allepisode', (req: Request, res: Response) => {
         res.status(400).json({ success: false, message: 'bookId parameter is required' });
         return;
     }
-    console.log('🚀 ALLEPISODE START [' + bookId + '] - proses batch dimulai...');
-    handleRequest(res, scraper.batchDownload(bookId), 'ALLEPISODE [' + bookId + ']');
+    const refresh = req.query.refresh === '1' || req.query.refresh === 'true';
+    console.log('🚀 ALLEPISODE START [' + bookId + '] - proses batch dimulai...' + (refresh ? ' [CACHE BYPASS]' : ''));
+    handleRequest(res, scraper.batchDownload(bookId, refresh), 'ALLEPISODE [' + bookId + ']');
 });
 
 // ── ERROR HANDLING & START ──────────────────────────────────────────────

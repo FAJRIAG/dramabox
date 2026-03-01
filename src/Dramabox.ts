@@ -1040,16 +1040,21 @@ export class DramaboxScraper {
         }
     }
 
-    async batchDownload(bookId: string): Promise<ApiResponse> {
+    async batchDownload(bookId: string, refresh: boolean = false): Promise<ApiResponse> {
         try {
             if (!bookId) {
                 return this.buildResponse(false, null, 'Book ID is required');
             }
 
             const cacheKey = `batch_${bookId}_${this.language}`;
-            const cached = this.cache.get(cacheKey);
-            if (cached) {
-                return this.buildResponse(true, cached);
+            if (!refresh) {
+                const cached = this.cache.get(cacheKey);
+                if (cached) {
+                    return this.buildResponse(true, cached);
+                }
+            } else {
+                // Invalidate stale cache when refresh is requested
+                this.cache.del(cacheKey);
             }
 
             let result: any[] = [];
