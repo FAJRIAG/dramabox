@@ -19,16 +19,24 @@ const scraper = new DramaboxScraper({
     maxRetries: 3
 });
 
-// Helper to handle async route responses
-const handleRequest = async (res: Response, scraperPromise: Promise<any>) => {
+// Helper to handle async route responses with emoji logging
+const handleRequest = async (res: Response, scraperPromise: Promise<any>, label?: string) => {
     try {
         const result = await scraperPromise;
+        if (label) {
+            if (result.success) {
+                console.log('✅ SUCCESS GET ' + label);
+            } else {
+                console.log('❌ FAILED GET ' + label + (result.message ? ' | ' + result.message : ''));
+            }
+        }
         if (result.success) {
             res.status(200).json(result);
         } else {
             res.status(400).json(result);
         }
     } catch (error: any) {
+        if (label) console.log('❌ ERROR GET ' + label + ' | ' + error.message);
         res.status(500).json({
             success: false,
             message: 'Internal server error',
@@ -264,21 +272,20 @@ app.get('/api/category/:id', (req: Request, res: Response) => {
 
 // ── SWAGGER UI ENDPOINTS ────────────────────────────────────────────────
 app.get('/dramabox/foryou', (_req: Request, res: Response) => {
-    // Uses recommended/for you
-    handleRequest(res, scraper.getRecommendedBooks());
+    handleRequest(res, scraper.getRecommendedBooks(), 'FORYOU');
 });
 
 app.get('/dramabox/vip', (_req: Request, res: Response) => {
-    handleRequest(res, scraper.getVip());
+    handleRequest(res, scraper.getVip(), 'VIP');
 });
 
 app.get('/dramabox/dubindo', (req: Request, res: Response) => {
     const classify = req.query.classify as string;
     const page = parseInt(req.query.page as string) || 1;
-    let typeTwoId = 0; // Default to all
-    if (classify === 'terpopuler') typeTwoId = 1001; // Guessing IDs or mapping logic could be expanded here
+    let typeTwoId = 0;
+    if (classify === 'terpopuler') typeTwoId = 1001;
     else if (classify === 'terbaru') typeTwoId = 1002;
-    handleRequest(res, scraper.getBooksByCategory(typeTwoId, page, 20)); // Simulated dubindo
+    handleRequest(res, scraper.getBooksByCategory(typeTwoId, page, 20), 'DUBINDO (' + (classify || 'all') + ')');
 });
 
 app.get('/dramabox/randomdrama', async (_req: Request, res: Response) => {
@@ -287,25 +294,27 @@ app.get('/dramabox/randomdrama', async (_req: Request, res: Response) => {
         if (result.success && result.data && result.data.results) {
             const list = result.data.results as any[];
             const random = list[Math.floor(Math.random() * list.length)];
+            console.log('✅ SUCCESS GET RANDOM DRAMA');
             res.json({ success: true, creator: 'Jridev', data: random, metadata: {}, message: null });
         } else {
-            handleRequest(res, Promise.resolve(result));
+            handleRequest(res, Promise.resolve(result), 'RANDOM DRAMA');
         }
     } catch (e: any) {
+        console.log('❌ ERROR GET RANDOM DRAMA | ' + e.message);
         res.status(500).json({ success: false, message: e.message });
     }
 });
 
 app.get('/dramabox/latest', (_req: Request, res: Response) => {
-    handleRequest(res, scraper.getLatest(1));
+    handleRequest(res, scraper.getLatest(1), 'LATEST');
 });
 
 app.get('/dramabox/trending', (_req: Request, res: Response) => {
-    handleRequest(res, scraper.getTrending());
+    handleRequest(res, scraper.getTrending(), 'TRENDING');
 });
 
 app.get('/dramabox/populersearch', (_req: Request, res: Response) => {
-    handleRequest(res, scraper.searchDramaIndex());
+    handleRequest(res, scraper.searchDramaIndex(), 'POPULERSEARCH');
 });
 
 app.get('/dramabox/search', (req: Request, res: Response) => {
@@ -314,7 +323,7 @@ app.get('/dramabox/search', (req: Request, res: Response) => {
         res.status(400).json({ success: false, message: 'query parameter is required' });
         return;
     }
-    handleRequest(res, scraper.searchDrama(query));
+    handleRequest(res, scraper.searchDrama(query), 'SEARCH (' + query + ')');
 });
 
 app.get('/dramabox/detail', (req: Request, res: Response) => {
@@ -323,7 +332,7 @@ app.get('/dramabox/detail', (req: Request, res: Response) => {
         res.status(400).json({ success: false, message: 'bookId parameter is required' });
         return;
     }
-    handleRequest(res, scraper.getDramaDetail(bookId));
+    handleRequest(res, scraper.getDramaDetail(bookId), 'DETAIL [' + bookId + ']');
 });
 
 app.get('/dramabox/allepisode', (req: Request, res: Response) => {
@@ -332,7 +341,8 @@ app.get('/dramabox/allepisode', (req: Request, res: Response) => {
         res.status(400).json({ success: false, message: 'bookId parameter is required' });
         return;
     }
-    handleRequest(res, scraper.batchDownload(bookId));
+    console.log('🚀 ALLEPISODE START [' + bookId + '] - proses batch dimulai...');
+    handleRequest(res, scraper.batchDownload(bookId), 'ALLEPISODE [' + bookId + ']');
 });
 
 // ── ERROR HANDLING & START ──────────────────────────────────────────────
