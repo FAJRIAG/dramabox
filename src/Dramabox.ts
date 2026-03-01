@@ -1398,7 +1398,3 @@ if (typeof window !== 'undefined') {
     (window as any).DramaboxScraper = DramaboxScraper;
 }
 
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = DramaboxScraper;
-    module.exports.default = DramaboxScraper;
-}
