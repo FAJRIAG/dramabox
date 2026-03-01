@@ -9,7 +9,7 @@
 import DramaboxScraper from './dist/esm/Dramabox.js';
 
 // ── CONFIG ───────────────────────────────────────
-const BOOK_ID = '41000122939'; // ganti jika perlu
+const BOOK_ID = '41000107296'; // ganti jika perlu
 const EPISODE = 1;
 const KEYWORD = 'love';
 const LANGUAGE = 'in';          // 'en', 'in', 'zh', dll
@@ -78,7 +78,10 @@ log(`  Keyword  : ${KEYWORD}`);
 
 // 1. AUTH
 section('1. Authentication');
-const tokenRes = await test('generateToken', () => scraper.generateToken());
+const tokenRes = await test('generateToken', async () => {
+  const data = await scraper.generateToken();
+  return { success: true, data };
+});
 if (tokenRes) {
   info(`Token    : ${tokenRes.data.token.slice(0, 40)}...`);
   info(`DeviceId : ${tokenRes.data.deviceId}`);
