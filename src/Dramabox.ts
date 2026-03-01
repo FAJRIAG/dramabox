@@ -189,7 +189,7 @@ export class DramaboxScraper {
     }
 
     private generateUUID(): string {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             const r = Math.random() * 16 | 0;
             const v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
@@ -221,10 +221,10 @@ export class DramaboxScraper {
     private getPrivateKey(): crypto.KeyObject {
         try {
             const part1 = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC9Q4Y5QX5j08HrnbY3irfKdkEllAU2OORnAjlXDyCzcm2Z6ZRrGvtTZUAMelfU5PWS6XGEm3d4kJEKbXi4Crl8o2E/E3YJPk1lQD1d0JTdrvZleETN1ViHZFSQwS3L94Woh0E3TPebaEYq88eExvKu1tDdjSoFjBbgMezySnas5Nc2xF28";
-            
+
             const encodedStr = `l|d,WL$EI,?xyw+*)^#?U\`[whXlG\`-GZif,.jCxbKkaY"{w*y]_jax^/1iVDdyg(Wbz+z/$xVjCiH0lZf/d|%gZglW)"~J,^~}w"}m(E'eEunz)eyEy\`XGaVF|_(Kw)|awUG"'{{e#%$0E.ffHVU++$giHzdvC0ZLXG|U{aVUUYW{{YVU^x),J'If\`nG|C[\`ZF),xLv(-H'}ZIEyCfke0dZ%aU[V)"V0}mhKvZ]Gw%-^a|m'\`\\f}{(~kzi&zjG+|fXX0$IH#j\`+hfnME"|fa/{.j.xf,"LZ.K^bZy%c.W^/v{x#(J},Ua,ew#.##K(ki)$LX{a-1\\MG/zL&JlEKEw'Hg|D&{EfuKYM[nGKx1V#lFu^V_LjVzw+n%+,Xd`;
             const part2 = this.decodeString(encodedStr);
-            
+
             const part3 = "x52e71nafqfbjXxZuEtpu92oJd6A9mWbd0BZTk72ZHUmDcKcqjfcEH19SWOphMJFYkxU5FRoIEr3/zisyTO4Mt33ZmwELOrY9PdlyAAyed7ZoH+hlTr7c025QROvb2LmqgRiUT56tMECgYEA+jH5m6iMRK6XjiBhSUnlr3DzRybwlQrtIj5sZprWe2my5uYHG3jbViYIO7GtQvMTnDrBCxNhuM6dPrL0cRnbsp/iBMXe3pyjT/aWveBkn4R+UpBsnbtDn28r1MZpCDtr5UNc0TPj4KFJvjnV/e8oGoyYEroECqcw1LqNOGDiLhkCgYEAwaemNePYrXW+MVX/hatfLQ96tpxwf7yuHdENZ2q5AFw73GJWYvC8VY+TcoKPAmeoCUMltI3TrS6K5Q/GoLd5K2BsoJrSxQNQFd3ehWAtdOuPDvQ5rn/2fsvgvc3rOvJh7uNnwEZCI/45WQg+UFWref4PPc+ArNtp9Xj2y7LndwkCgYARojIQeXmhYZjG6JtSugWZLuHGkwUDzChYcIPd";
             const part4 = "W25ndluokG/RzNvQn4+W/XfTryQjr7RpXm1VxCIrCBvYWNU2KrSYV4XUtL+B5ERNj6In6AOrOAifuVITy5cQQQeoD+AT4YKKMBkQfO2gnZzqb8+ox130e+3K/mufoqJPZeyrCQKBgC2fobjwhQvYwYY+DIUharri+rYrBRYTDbJYnh/PNOaw1CmHwXJt5PEDcml3+NlIMn58I1X2U/hpDrAIl3MlxpZBkVYFI8LmlOeR7ereTddN59ZOE4jY/OnCfqA480Jf+FKfoMHby5lPO5OOLaAfjtae1FhrmpUe3EfIx9wVuhKBAoGBAPFzHKQZbGhkqmyPW2ctTEIWLdUHyO37fm8dj1WjN4wjRAI4ohNiKQJRh3QE11E1PzBTl9lZVWT8QtEsSjnrA/tpGr378fcUT7WGBgTmBRaAnv1P1n/Tp0TSvh5XpIhhMuxcitIgrhYMIG3GbP9JNAarxO/qPW6Gi0xWaF7il7Or";
 
@@ -264,7 +264,7 @@ export class DramaboxScraper {
     private buildResponse(success: boolean, data: any = null, message: string | null = null, metadata: any = {}): ApiResponse {
         return {
             success,
-            creator: 'zhadevv',
+            creator: 'standalone',
             data,
             metadata,
             message
@@ -331,9 +331,9 @@ export class DramaboxScraper {
 
         try {
             await this.applyRateLimit();
-            const response = await axios.post(url, { distinctId: null }, { 
-                headers, 
-                timeout: this.timeout 
+            const response = await axios.post(url, { distinctId: null }, {
+                headers,
+                timeout: this.timeout
             });
 
             const responseData = response.data as any;
@@ -372,8 +372,8 @@ export class DramaboxScraper {
         const body = JSON.stringify(payload);
         const headers: any = {
             tn: `Bearer ${tokenData.token}`,
-            version: '451',
-            vn: '4.5.1',
+            version: this.version || '470',
+            vn: '4.7.0',
             cid: 'DAUAF1064291',
             'package-Name': 'com.storymatrix.drama',
             Apn: '1',
@@ -1118,7 +1118,7 @@ export class DramaboxScraper {
 
             const { chapterList, book } = data?.data || {};
             const chapters: Array<{ index: number; id: string }> = [];
-            
+
             chapterList?.forEach((ch: any) => {
                 chapters.push({ index: ch.index, id: ch.id });
             });
@@ -1145,7 +1145,7 @@ export class DramaboxScraper {
             const pageNo = filters?.pageNo || 1;
             const pageSize = filters?.pageSize || 20;
             const cacheKey = `advsearch_${keyword}_${JSON.stringify(filters)}_${this.language}`;
-            
+
             const cached = this.cache.get(cacheKey);
             if (cached) {
                 return this.buildResponse(true, cached);
@@ -1329,7 +1329,7 @@ export class DramaboxScraper {
             }
 
             const stream = await this.getStreamUrl(bookId, episodeIndex);
-            
+
             const responseData = {
                 bookId,
                 episode: {
@@ -1373,7 +1373,7 @@ export class DramaboxScraper {
             webficUrl: this.webficUrl,
             userAgent: this.userAgent
         };
-        
+
         return this.buildResponse(true, config);
     }
 

@@ -1,5 +1,5 @@
 {
-  "name": "@zhadev/dramabox",
+  "name": "dramabox-api-standalone",
   "version": "0.0.1",
   "description": "Unofficial Dramabox Scrapers.",
   "main": "dist/cjs/Dramabox.js",
@@ -35,18 +35,18 @@
     "parser",
     "api",
     "typescript",
-    "zhadevv"
+    "standalone"
   ],
-  "author": "zhadevv",
+  "author": "standalone",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zhadevv/dramabox.git"
+    "url": "git+https://github.com/standalone/dramabox.git"
   },
   "bugs": {
-    "url": "https://github.com/zhadevv/dramabox/issues"
+    "url": "https://github.com/standalone/dramabox/issues"
   },
-  "homepage": "https://github.com/zhadevv/dramabox#readme",
+  "homepage": "https://github.com/standalone/dramabox#readme",
   "engines": {
     "node": ">=18.0.0"
   },
