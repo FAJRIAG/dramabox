@@ -573,7 +573,7 @@ export class DramaboxScraper {
             }
 
             // Map V2 response back to expected V1 structure for backward compatibility
-            const bookData = v2Response.data;
+            const bookData = v2Response.data?.drama || {};
             const detail: DramaDetail = {
                 bookId: bookData.bookId,
                 bookName: bookData.name,
