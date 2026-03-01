@@ -181,13 +181,13 @@ await test(`batchDownload(${BOOK_ID})`, () => scraper.batchDownload(BOOK_ID));
 section('8. Cache & Config');
 const cacheStats = scraper.getCacheStats();
 console.log(`  Testing ${CYAN}getCacheStats()${RESET}... ${GREEN}PASS${RESET}`);
-info(`Cache hits: ${cacheStats.hits ?? 0}, misses: ${cacheStats.misses ?? 0}`);
+info(`Cache hits: ${cacheStats.data?.hits ?? 0}, misses: ${cacheStats.data?.misses ?? 0}`);
 passed++;
 results.push({ name: 'getCacheStats()', status: 'PASS', ms: 0 });
 
-const config = scraper.getConfig();
+const configResp = await scraper.getConfig();
 console.log(`  Testing ${CYAN}getConfig()${RESET}... ${GREEN}PASS${RESET}`);
-info(`Language: ${config.language}, Version: ${config.version}`);
+info(`Language: ${configResp.data?.language}, Version: ${configResp.data?.version}`);
 passed++;
 results.push({ name: 'getConfig()', status: 'PASS', ms: 0 });
 
