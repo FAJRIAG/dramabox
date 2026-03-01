@@ -264,7 +264,7 @@ export class DramaboxScraper {
     private buildResponse(success: boolean, data: any = null, message: string | null = null, metadata: any = {}): ApiResponse {
         return {
             success,
-            creator: 'standalone',
+            creator: 'Jridev',
             data,
             metadata,
             message

@@ -1,7 +1,7 @@
 const { DramaboxScraper } = require('./src/Dramabox.ts');
 
 async function main() {
-    console.log("Inisialisasi Dramabox API Standalone...");
+    console.log("Inisialisasi Dramabox API Jridev...");
     const scraper = new DramaboxScraper({ language: 'in', timeout: 30000 });
 
     try {

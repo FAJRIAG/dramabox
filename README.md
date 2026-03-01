@@ -1,10 +1,10 @@
-## @zhadev/dramabox
+## @jridev/dramabox
 ---
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license">
   <img src="https://img.shields.io/badge/types-TypeScript-blue.svg" alt="TypeScript">
-  <img src="https://img.shields.io/npm/v/@zhadev/dramabox" alt="npm version">
-  <img src="https://img.shields.io/npm/dt/@zhadev/dramabox" alt="npm downloads">
+  <img src="https://img.shields.io/npm/v/@jridev/dramabox" alt="npm version">
+  <img src="https://img.shields.io/npm/dt/@jridev/dramabox" alt="npm downloads">
   <img src="https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen" alt="node version">
 </p>
 
@@ -21,13 +21,13 @@
 ### Installation
 ```bash
 # npm
-npm install @zhadev/dramabox
+npm install @jridev/dramabox
 
 # yarn
-yarn add @zhadev/dramabox
+yarn add @jridev/dramabox
 
 # pnpm
-pnpm add @zhadev/dramabox
+pnpm add @jridev/dramabox
 ```
 
 ### Quick Start
@@ -35,10 +35,10 @@ pnpm add @zhadev/dramabox
 Node.js / Typescript
 ```javascript
 // ES Module
-import DramaboxScraper from '@zhadev/dramabox';
+import DramaboxScraper from '@jridev/dramabox';
 
 // CommonJS
-const DramaboxScraper = require('@zhadev/dramabox').default;
+const DramaboxScraper = require('@jridev/dramabox').default;
 
 // Initialize
 const scraper = new DramaboxScraper();
@@ -46,7 +46,7 @@ const scraper = new DramaboxScraper();
 
 Browser (via CDN)
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@zhadev/dramabox/dist/javascript/browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@jridev/dramabox/dist/javascript/browser.min.js"></script>
 <script>
   const scraper = new DramaboxScraper();
   
@@ -58,7 +58,7 @@ Browser (via CDN)
 
 With Configuration
 ```javascript
-import DramaboxScraper from '@zhadev/dramabox';
+import DramaboxScraper from '@jridev/dramabox';
 
 const scraper = new DramaboxScraper({
   language: 'in',          // Language code: 'in', 'en', etc.
@@ -164,7 +164,7 @@ All methods return a standardized response:
 ```typescript
 interface ApiResponse {
   success: boolean;           // Whether the request was successful
-  creator: string;           // Creator name ('zhadevv')
+  creator: string;           // Creator name ('Jridev')
   data: any;                // The scraped data
   metadata: any;           // Additional metadata
   message: string | null;  // Error message if any
@@ -172,13 +172,13 @@ interface ApiResponse {
 ```
 
 ### Response Example
-- All Response Example in [here](https://github.com/zhadevv/dramabox/tree/main/response_examples).
+- All Response Example in [here](https://github.com/Jridev/dramabox/tree/main/response_examples).
 
 Token Generation:
 ```json
 {
   "success": true,
-  "creator": "zhadevv",
+  "creator": "Jridev",
   "data": {
     "token": "ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SnlaV2RwYzNSbGNsUjVjR1VpT2lKVVJVMVFJaXdpZFhObGNrbGtJam96T1RVeU56WTJNamw5LmdRbzBrT3pvV0lIU2lhZlJuNE5fRGZ1OTFnSkd5WDlITFk1Y3RGejdJZTg=",
     "deviceId": "77783a44-512f-4fbb-8373-c98206f31a8b",
@@ -197,7 +197,7 @@ Latest
 ```json
 {
   "success": true,
-  "creator": "zhadevv",
+  "creator": "Jridev",
   "data": {
     "page": 1,
     "total": 25,
@@ -293,7 +293,7 @@ if (batch.success) {
 
 TypeScript Example
 ```typescript
-import DramaboxScraper, { ApiResponse, DramaItem } from '@zhadev/dramabox';
+import DramaboxScraper, { ApiResponse, DramaItem } from '@jridev/dramabox';
 
 const scraper = new DramaboxScraper();
 
@@ -422,7 +422,7 @@ Build Targets
 
 ### Project Structure
 ```
-@zhadev/dramabox/
+@jridev/dramabox/
 ├── src/
 │   └── Dramabox.ts         # Main library source
 ├── dist/
@@ -453,7 +453,7 @@ Contributions are welcome! Please follow these steps:
 ### Development Setup
 ```bash
 # Clone repository
-git clone https://github.com/zhadevv/dramabox.git
+git clone https://github.com/Jridev/dramabox.git
 cd dramabox
 
 # Install dependencies
@@ -474,7 +474,7 @@ This project is licensed under the MIT License.
 ```
 MIT License
 
-Copyright (c) 2025 zhadevv
+Copyright (c) 2025 Jridev
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -496,10 +496,10 @@ SOFTWARE.
 ```
 
 ### Links
-- NPM Package: [@zhadev/dramabox](https://www.npmjs.com/package/@zhadev/dramabox?activeTab=readme)
-- GitHub Repository: [zhadevv/dramabox](https://github.com/zhadevv/dramabox/tree/main)
-- Issue Tracker: [GitHub Issues](https://github.com/zhadevv/dramabox/issues)
-- Change Log: [Changelogs](https://github.com/zhadevv/dramabox/blob/main/CHANGELOG.md)
+- NPM Package: [@jridev/dramabox](https://www.npmjs.com/package/@jridev/dramabox?activeTab=readme)
+- GitHub Repository: [Jridev/dramabox](https://github.com/Jridev/dramabox/tree/main)
+- Issue Tracker: [GitHub Issues](https://github.com/Jridev/dramabox/issues)
+- Change Log: [Changelogs](https://github.com/Jridev/dramabox/blob/main/CHANGELOG.md)
 
 ### Acknowledgements
 - Dramabox
