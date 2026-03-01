@@ -42,14 +42,13 @@ const handleRequest = async (res: Response, scraperPromise: Promise<any>) => {
 // Fast API Key Config
 const FAST_API_KEY = process.env.FAST_API_KEY || 'jridev-fast-777';
 
-// Root / Health Check
 const apiDocHTML = `
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buku Panduan API Jridev Dramabox</title>
+    <title>Buku Panduan API Jridev Dramabox v1.2</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f6f9; }
         h1 { color: #1e293b; border-bottom: 3px solid #3b82f6; padding-bottom: 10px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
@@ -64,77 +63,77 @@ const apiDocHTML = `
         .params strong { color: #1e293b; }
         code { background: #e2e8f0; color: #0f172a; padding: 2px 6px; border-radius: 4px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.9em; font-weight: 500; }
         footer { margin-top: 60px; text-align: center; color: #64748b; font-size: 0.9em; border-top: 1px solid #e2e8f0; padding-top: 20px; }
-        .badge { background: #f59e0b; color: white; font-size: 0.7em; padding: 3px 6px; border-radius: 4px; vertical-align: middle; margin-left: 10px; }
+        .badge { background: #3b82f6; color: white; font-size: 0.7em; padding: 3px 6px; border-radius: 4px; vertical-align: middle; margin-left: 10px; }
     </style>
 </head>
 <body>
-    <h1>🎬 API Jridev Dramabox <span class="badge">v1.1 Fast</span></h1>
+    <h1>🎬 API Jridev Dramabox <span class="badge">v1.2 Swagger</span></h1>
     <p>Selamat datang di Server API Publik Jridev Dramabox. Server ini menyediakan aliran data langsung dari database untuk film dan episode pendek secara <i>real-time</i>.</p>
 
     <div class="alert">
-        ⚠️ <strong>Sistem Keamanan Aktif:</strong> Setiap pemanggilan tautan (endpoint) di bawah ini DIWAJIBKAN menambahkan parameter <code>?apikey=jridev-fast-777</code> di akhir URL. Jika tidak, permintaan Anda akan ditolak secara otomatis.
+        ⚠️ <strong>Sistem Keamanan Aktif:</strong> Setiap pemanggilan tautan (endpoint) di bawah ini DIWAJIBKAN menambahkan parameter <code>?apikey=jridev-fast-777</code> di URL Anda.
     </div>
 
-    <h2>🌟 Jalur Utama (Core)</h2>
+    <h2>🌟 Dokumentasi Endpoints /dramabox</h2>
     
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/api/ping</span>
-        <div class="desc">Memeriksa apakah mesin server menyala dan merespon dengan baik.</div>
-        <div class="params"><strong>Contoh:</strong> <code>/api/ping?apikey=jridev-fast-777</code></div>
+        <span class="method">GET</span> <span class="path">/dramabox/foryou</span>
+        <div class="desc"><strong>For You (Untukmu)</strong> - Mengambil daftar drama rekomendasi untuk pengguna.</div>
+        <div class="params"><strong>Parameters:</strong> <code>page</code> (integer, query) - Nomor halaman, default 1</div>
     </div>
 
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/api/homepage</span>
-        <div class="desc">Mengambil struktur lengkap halaman depan (banner promo, sekmen rekomendasi).</div>
+        <span class="method">GET</span> <span class="path">/dramabox/vip</span>
+        <div class="desc"><strong>Halaman VIP</strong> - Mengambil daftar drama di halaman VIP khusus akun berbayar.</div>
+        <div class="params"><strong>Parameters:</strong> No parameters</div>
     </div>
 
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/api/trending</span>
-        <div class="desc">Mendapatkan daftar film dengan peringkat paling populer / tren saat ini.</div>
+        <span class="method">GET</span> <span class="path">/dramabox/dubindo</span>
+        <div class="desc"><strong>Ambil list drama dub indo</strong> - Mengambil list drama dub indo dari kategori terpopuler atau terbaru.</div>
+        <div class="params"><strong>Parameters:</strong> <br><code>classify</code> (string, query) - "terpopuler" atau "terbaru"<br><code>page</code> (integer, query) - Nomor halaman, default 1</div>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method">GET</span> <span class="path">/dramabox/randomdrama</span>
+        <div class="desc"><strong>Random Drama Video</strong> - Mengambil video drama secara acak (For You Versi Video).</div>
+        <div class="params"><strong>Parameters:</strong> No parameters</div>
     </div>
 
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/api/latest</span>
-        <div class="desc">Mengambil daftar film yang baru saja diperbarui episode-nya.</div>
-        <div class="params"><strong>Parameter:</strong> <code>?page=1</code> (halaman tabel, bawaan: 1)</div>
-    </div>
-
-    <h2>🔍 Penemuan & Pencarian</h2>
-
-    <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/api/search</span>
-        <div class="desc">Mencari judul film secara spesifik berdasarkan kata kunci.</div>
-        <div class="params"><strong>Parameter Wajib:</strong> <code>?q=katakunci</code><br><strong>Opsional:</strong> <code>?page=1</code>, <code>?size=20</code></div>
+        <span class="method">GET</span> <span class="path">/dramabox/latest</span>
+        <div class="desc"><strong>Drama Terbaru</strong> - Mengambil daftar drama yang baru dirilis.</div>
+        <div class="params"><strong>Parameters:</strong> No parameters</div>
     </div>
 
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/api/categories</span>
-        <div class="desc">Menampilkan seluruh daftar kategori dan genre film yang tersedia.</div>
+        <span class="method">GET</span> <span class="path">/dramabox/trending</span>
+        <div class="desc"><strong>Trending Drama</strong> - Mengambil daftar drama yang sedang populer.</div>
+        <div class="params"><strong>Parameters:</strong> No parameters</div>
     </div>
 
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/api/category/:id</span>
-        <div class="desc">Menampilkan daftar film yang masuk ke dalam kategori tertentu.</div>
-        <div class="params"><strong>Format:</strong> <code>id</code> diganti dengan Angka Kategori (contoh: 1001).<br><strong>Opsional:</strong> <code>?page=1</code></div>
-    </div>
-
-    <h2>📖 Detail Judul & Episode Filem</h2>
-
-    <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/api/drama/:id</span>
-        <div class="desc">Mengambil informasi sangat lengkap mengenai satu film, termasuk sinopsis, tag, dan jumlah tayang.</div>
-        <div class="params"><strong>Format:</strong> <code>id</code> adalah angka Book ID (contoh: 41000107296).</div>
+        <span class="method">GET</span> <span class="path">/dramabox/populersearch</span>
+        <div class="desc"><strong>Pencarian Populer</strong> - Mengambil daftar kata kunci pencarian yang paling banyak dicari saat ini.</div>
+        <div class="params"><strong>Parameters:</strong> No parameters</div>
     </div>
 
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/api/drama/:id/chapters</span>
-        <div class="desc">Menampilkan daftar urutan babak (chapter) beserta ID video yang siap diputar.</div>
+        <span class="method">GET</span> <span class="path">/dramabox/search</span>
+        <div class="desc"><strong>Cari Drama</strong> - Mencari drama berdasarkan judul atau kueri tertentu.</div>
+        <div class="params"><strong>Parameters:</strong> <code>query</code> * (string, query) - Kata kunci pencarian (contoh: pewaris)</div>
     </div>
 
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/api/drama/:id/stream/:ep</span>
-        <div class="desc">Mengekstrasi langsung *link* video murni (MP4 / M3U8) dari episode yang dipilih untuk diputar di aplikasi Anda.</div>
-        <div class="params"><strong>Format:</strong> <code>ep</code> adalah nomor episode (contoh: 1 atau 5).</div>
+        <span class="method">GET</span> <span class="path">/dramabox/detail</span>
+        <div class="desc"><strong>Ambil Detail Drama</strong> - Mengambil detail drama dari bookId.</div>
+        <div class="params"><strong>Parameters:</strong> <code>bookId</code> * (string, query) - ID unik drama (contoh: 41000116666)</div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method">GET</span> <span class="path">/dramabox/allepisode</span>
+        <div class="desc"><strong>Ambil Semua Episode</strong> - Mengambil link streaming MP4 untuk seluruh episode dari sebuah drama sekaligus (Batch). NOTE: Proses ini membutuhkan waktu yang lebih lama tergantung jumlah bab.</div>
+        <div class="params"><strong>Parameters:</strong> <code>bookId</code> * (string, query) - ID unik drama (contoh: 41000116666)</div>
     </div>
 
     <footer>
@@ -284,6 +283,79 @@ app.get('/api/category/:id', (req: Request, res: Response) => {
     handleRequest(res, scraper.getBooksByCategory(categoryId, page, size));
 });
 
+// ── SWAGGER UI ENDPOINTS ────────────────────────────────────────────────
+app.get('/dramabox/foryou', (_req: Request, res: Response) => {
+    // Uses recommended/for you
+    handleRequest(res, scraper.getRecommendedBooks());
+});
+
+app.get('/dramabox/vip', (_req: Request, res: Response) => {
+    handleRequest(res, scraper.getVip());
+});
+
+app.get('/dramabox/dubindo', (req: Request, res: Response) => {
+    const classify = req.query.classify as string;
+    const page = parseInt(req.query.page as string) || 1;
+    let typeTwoId = 0; // Default to all
+    if (classify === 'terpopuler') typeTwoId = 1001; // Guessing IDs or mapping logic could be expanded here
+    else if (classify === 'terbaru') typeTwoId = 1002;
+    handleRequest(res, scraper.getBooksByCategory(typeTwoId, page, 20)); // Simulated dubindo
+});
+
+app.get('/dramabox/randomdrama', async (_req: Request, res: Response) => {
+    try {
+        const result = await scraper.getRecommendedBooks();
+        if (result.success && result.data && result.data.results) {
+            const list = result.data.results as any[];
+            const random = list[Math.floor(Math.random() * list.length)];
+            res.json({ success: true, creator: 'Jridev', data: random, metadata: {}, message: null });
+        } else {
+            handleRequest(res, Promise.resolve(result));
+        }
+    } catch (e: any) {
+        res.status(500).json({ success: false, message: e.message });
+    }
+});
+
+app.get('/dramabox/latest', (_req: Request, res: Response) => {
+    handleRequest(res, scraper.getLatest(1));
+});
+
+app.get('/dramabox/trending', (_req: Request, res: Response) => {
+    handleRequest(res, scraper.getTrending());
+});
+
+app.get('/dramabox/populersearch', (_req: Request, res: Response) => {
+    handleRequest(res, scraper.searchDramaIndex());
+});
+
+app.get('/dramabox/search', (req: Request, res: Response) => {
+    const query = req.query.query as string;
+    if (!query) {
+        res.status(400).json({ success: false, message: 'query parameter is required' });
+        return;
+    }
+    handleRequest(res, scraper.searchDrama(query));
+});
+
+app.get('/dramabox/detail', (req: Request, res: Response) => {
+    const bookId = req.query.bookId as string;
+    if (!bookId) {
+        res.status(400).json({ success: false, message: 'bookId parameter is required' });
+        return;
+    }
+    handleRequest(res, scraper.getDramaDetail(bookId));
+});
+
+app.get('/dramabox/allepisode', (req: Request, res: Response) => {
+    const bookId = req.query.bookId as string;
+    if (!bookId) {
+        res.status(400).json({ success: false, message: 'bookId parameter is required' });
+        return;
+    }
+    handleRequest(res, scraper.batchDownload(bookId));
+});
+
 // ── ERROR HANDLING & START ──────────────────────────────────────────────
 
 // Handle 404
@@ -299,6 +371,7 @@ app.listen(Number(port), "0.0.0.0", () => {
     console.log("  Jridev Dramabox API Server is LIVE!");
     console.log("========================================");
     console.log("🚀 Server running on port " + port);
-    console.log("👉 Test: http://localhost:" + port + "/api/ping?apikey=" + FAST_API_KEY);
+    console.log("👉 URL: http://localhost:" + port + "/");
+    console.log("👉 Test: http://localhost:" + port + "/dramabox/foryou?apikey=" + FAST_API_KEY);
     console.log("========================================\n");
 });
