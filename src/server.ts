@@ -540,20 +540,34 @@ app.get('/dramabox/allepisode', (req: Request, res: Response) => {
 
 // ── ERROR HANDLING & START ──────────────────────────────────────────────
 
-// Handle 404
-app.use((_req: Request, res: Response) => {
-    res.status(404).json({
-        success: false,
-        message: 'Endpoint not found'
-    });
-});
+// ── STARTUP ─────────────────────────────────────────────────────────────
 
-app.listen(Number(port), "0.0.0.0", () => {
-    console.log("\n========================================");
-    console.log("  Jridev Dramabox API Server is LIVE!");
-    console.log("========================================");
-    console.log("🚀 Server running on port " + port);
-    console.log("👉 URL: http://localhost:" + port + "/");
-    console.log("👉 Test: http://localhost:" + port + "/dramabox/foryou");
-    console.log("========================================\n");
-});
+async function startServer() {
+    // Fetch and inject working token from external source
+    try {
+        const tokenUrl = process.env.TOKEN_URL || 'https://dramabox-token.vercel.app/token';
+        console.log('🔄 Fetching token from: ' + tokenUrl);
+        const { default: axios } = await import('axios');
+        const res = await axios.get(tokenUrl, { timeout: 10000 });
+        const { token, deviceid, androidid } = res.data as any;
+        if (token && deviceid && androidid) {
+            scraper.injectToken(token, deviceid, androidid);
+        } else {
+            console.log('⚠️  Token response format unexpected, using auto-generated token');
+        }
+    } catch (e: any) {
+        console.log('⚠️  Could not fetch external token (' + e.message + '), using auto-generated token');
+    }
+
+    app.listen(Number(port), "0.0.0.0", () => {
+        console.log("\n========================================");
+        console.log("  Jridev Dramabox API Server is LIVE!");
+        console.log("========================================");
+        console.log("🚀 Server running on port " + port);
+        console.log("👉 URL: http://localhost:" + port + "/");
+        console.log("👉 Test: http://localhost:" + port + "/dramabox/foryou");
+        console.log("========================================\n");
+    });
+}
+
+startServer();

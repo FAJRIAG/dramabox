@@ -171,6 +171,25 @@ export class DramaboxScraper {
         });
     }
 
+    /**
+     * Inject a pre-built token from an external source (e.g. dramabox-token.vercel.app)
+     * This overrides the auto-generated anonymous bootstrap token.
+     */
+    injectToken(token: string, deviceId: string, androidId: string): void {
+        this.tokenCache = {
+            token,
+            deviceId,
+            androidId,
+            spoffer: this.generateRandomIP(),
+            uuid: '0',
+            timestamp: Date.now(),
+            expiry: Date.now() + 24 * 60 * 60 * 1000, // 24h
+        };
+        const cacheKey = `token_${this.language}`;
+        this.cache.set(cacheKey, this.tokenCache, 3600);
+        console.log('🔑 Token injected successfully [deviceId: ' + deviceId.substring(0, 8) + '...]');
+    }
+
     private async applyRateLimit(): Promise<void> {
         const now = Date.now();
         const elapsed = now - this.lastRequestTime;
