@@ -39,94 +39,106 @@ const handleRequest = async (res: Response, scraperPromise: Promise<any>) => {
 
 // ── ROUTES ──────────────────────────────────────────────────────────────
 
+// Fast API Key Config
+const FAST_API_KEY = process.env.FAST_API_KEY || 'jridev-fast-777';
+
 // Root / Health Check
 const apiDocHTML = `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jridev Dramabox API Documentation</title>
+    <title>Buku Panduan API Jridev Dramabox</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; }
-        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        h2 { color: #2980b9; margin-top: 30px; }
-        .endpoint { background: #fff; border-left: 4px solid #3498db; padding: 15px; margin-bottom: 20px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .method { display: inline-block; background: #2ecc71; color: white; padding: 3px 8px; border-radius: 3px; font-weight: bold; font-size: 0.85em; margin-right: 10px; }
-        .path { font-family: monospace; font-size: 1.1em; color: #e74c3c; }
-        .desc { margin-top: 10px; color: #555; }
-        .params { margin-top: 10px; background: #f8f9fa; padding: 10px; border-radius: 4px; font-size: 0.9em; }
-        .params strong { color: #2c3e50; }
-        code { background: #eee; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
-        footer { margin-top: 50px; text-align: center; color: #7f8c8d; font-size: 0.9em; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f6f9; }
+        h1 { color: #1e293b; border-bottom: 3px solid #3b82f6; padding-bottom: 10px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        h2 { color: #2563eb; margin-top: 35px; border-left: 4px solid #3b82f6; padding-left: 10px; }
+        .alert { background: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 15px; border-radius: 6px; margin-bottom: 25px; font-weight: 500; }
+        .endpoint { background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s; }
+        .endpoint:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .method { display: inline-block; background: #10b981; color: white; padding: 4px 10px; border-radius: 4px; font-weight: 700; font-size: 0.85em; margin-right: 12px; letter-spacing: 0.5px; }
+        .path { font-family: 'Courier New', Courier, monospace; font-size: 1.15em; color: #dc2626; font-weight: 600; }
+        .desc { margin-top: 12px; color: #475569; font-size: 0.95em; }
+        .params { margin-top: 15px; background: #f8fafc; padding: 12px; border-radius: 6px; font-size: 0.9em; border: 1px solid #e2e8f0; border-left: 3px solid #cbd5e1; }
+        .params strong { color: #1e293b; }
+        code { background: #e2e8f0; color: #0f172a; padding: 2px 6px; border-radius: 4px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.9em; font-weight: 500; }
+        footer { margin-top: 60px; text-align: center; color: #64748b; font-size: 0.9em; border-top: 1px solid #e2e8f0; padding-top: 20px; }
+        .badge { background: #f59e0b; color: white; font-size: 0.7em; padding: 3px 6px; border-radius: 4px; vertical-align: middle; margin-left: 10px; }
     </style>
 </head>
 <body>
-    <h1>🎬 Jridev Dramabox API</h1>
-    <p>Welcome to the Unofficial Dramabox API Wrapper. Below is the list of available endpoints and how to use them.</p>
+    <h1>🎬 API Jridev Dramabox <span class="badge">v1.1 Fast</span></h1>
+    <p>Selamat datang di Server API Publik Jridev Dramabox. Server ini menyediakan aliran data langsung dari database untuk film dan episode pendek secara <i>real-time</i>.</p>
 
-    <h2>🌟 Core Endpoints</h2>
+    <div class="alert">
+        ⚠️ <strong>Sistem Keamanan Aktif:</strong> Setiap pemanggilan tautan (endpoint) di bawah ini DIWAJIBKAN menambahkan parameter <code>?apikey=jridev-fast-777</code> di akhir URL. Jika tidak, permintaan Anda akan ditolak secara otomatis.
+    </div>
+
+    <h2>🌟 Jalur Utama (Core)</h2>
     
     <div class="endpoint">
         <span class="method">GET</span> <span class="path">/api/ping</span>
-        <div class="desc">Check if the scraper and API are online and functioning.</div>
+        <div class="desc">Memeriksa apakah mesin server menyala dan merespon dengan baik.</div>
+        <div class="params"><strong>Contoh:</strong> <code>/api/ping?apikey=jridev-fast-777</code></div>
     </div>
 
     <div class="endpoint">
         <span class="method">GET</span> <span class="path">/api/homepage</span>
-        <div class="desc">Retrieve the main Dramabox homepage data (banners, sections).</div>
+        <div class="desc">Mengambil struktur lengkap halaman depan (banner promo, sekmen rekomendasi).</div>
     </div>
 
     <div class="endpoint">
         <span class="method">GET</span> <span class="path">/api/trending</span>
-        <div class="desc">Get the trending/top globally ranked dramas.</div>
+        <div class="desc">Mendapatkan daftar film dengan peringkat paling populer / tren saat ini.</div>
     </div>
 
     <div class="endpoint">
         <span class="method">GET</span> <span class="path">/api/latest</span>
-        <div class="desc">Get the latest updated dramas.</div>
-        <div class="params"><strong>Query Parameters:</strong> <code>?page=1</code> (default: 1)</div>
+        <div class="desc">Mengambil daftar film yang baru saja diperbarui episode-nya.</div>
+        <div class="params"><strong>Parameter:</strong> <code>?page=1</code> (halaman tabel, bawaan: 1)</div>
     </div>
 
-    <h2>🔍 Search & Discovery</h2>
+    <h2>🔍 Penemuan & Pencarian</h2>
 
     <div class="endpoint">
         <span class="method">GET</span> <span class="path">/api/search</span>
-        <div class="desc">Search for a specific drama by title or keyword.</div>
-        <div class="params"><strong>Query Parameters:</strong> <code>?q=keyword</code> (required), <code>?page=1</code>, <code>?size=20</code></div>
+        <div class="desc">Mencari judul film secara spesifik berdasarkan kata kunci.</div>
+        <div class="params"><strong>Parameter Wajib:</strong> <code>?q=katakunci</code><br><strong>Opsional:</strong> <code>?page=1</code>, <code>?size=20</code></div>
     </div>
 
     <div class="endpoint">
         <span class="method">GET</span> <span class="path">/api/categories</span>
-        <div class="desc">List all available drama genres and categories.</div>
+        <div class="desc">Menampilkan seluruh daftar kategori dan genre film yang tersedia.</div>
     </div>
 
     <div class="endpoint">
         <span class="method">GET</span> <span class="path">/api/category/:id</span>
-        <div class="desc">Get dramas belonging to a specific category ID (e.g., 1001).</div>
-        <div class="params"><strong>Params:</strong> <code>id</code> (Category ID). <strong>Query:</strong> <code>?page=1</code>, <code>?size=20</code></div>
+        <div class="desc">Menampilkan daftar film yang masuk ke dalam kategori tertentu.</div>
+        <div class="params"><strong>Format:</strong> <code>id</code> diganti dengan Angka Kategori (contoh: 1001).<br><strong>Opsional:</strong> <code>?page=1</code></div>
     </div>
 
-    <h2>📖 Drama Details & Episodes</h2>
+    <h2>📖 Detail Judul & Episode Filem</h2>
 
     <div class="endpoint">
         <span class="method">GET</span> <span class="path">/api/drama/:id</span>
-        <div class="desc">Get full metadata, tags, and summary for a specific drama/book ID (e.g., 41000107296).</div>
+        <div class="desc">Mengambil informasi sangat lengkap mengenai satu film, termasuk sinopsis, tag, dan jumlah tayang.</div>
+        <div class="params"><strong>Format:</strong> <code>id</code> adalah angka Book ID (contoh: 41000107296).</div>
     </div>
 
     <div class="endpoint">
         <span class="method">GET</span> <span class="path">/api/drama/:id/chapters</span>
-        <div class="desc">Get the list of all available episodes/chapters for a drama.</div>
+        <div class="desc">Menampilkan daftar urutan babak (chapter) beserta ID video yang siap diputar.</div>
     </div>
 
     <div class="endpoint">
         <span class="method">GET</span> <span class="path">/api/drama/:id/stream/:ep</span>
-        <div class="desc">Get the raw MP4 and M3U8 streaming URLs for a specific episode.</div>
-        <div class="params"><strong>Params:</strong> <code>id</code> (Drama ID), <code>ep</code> (Episode number, default: 1)</div>
+        <div class="desc">Mengekstrasi langsung *link* video murni (MP4 / M3U8) dari episode yang dipilih untuk diputar di aplikasi Anda.</div>
+        <div class="params"><strong>Format:</strong> <code>ep</code> adalah nomor episode (contoh: 1 atau 5).</div>
     </div>
 
     <footer>
-        <p>Created by Jridev ⚡ Powered by Node.js & Express</p>
+        <p>⚡ Diciptakan dengan kecepatan oleh <strong>Jridev</strong> • Express API Engine</p>
     </footer>
 </body>
 </html>
@@ -138,6 +150,21 @@ app.get('/', (_req: Request, res: Response) => {
 
 app.get('/api', (_req: Request, res: Response) => {
     res.send(apiDocHTML);
+});
+
+// Middleware Fast API Key (Diterapkan ke semua rute di bawah baris ini)
+app.use((req: Request, res: Response, next: express.NextFunction) => {
+    const providedKey = req.query.apikey;
+
+    if (!providedKey || providedKey !== FAST_API_KEY) {
+        res.status(401).json({
+            success: false,
+            message: 'API Key Tidak Valid atau Kosong. Harap sertakan ?apikey=jridev-fast-777 di setiap request Anda.'
+        });
+        return;
+    }
+
+    next();
 });
 
 app.get('/api/ping', (_req: Request, res: Response) => {
@@ -267,11 +294,11 @@ app.use((_req: Request, res: Response) => {
     });
 });
 
-app.listen(port as number, '0.0.0.0', () => {
-    console.log(`\n========================================`);
-    console.log(`  Jridev Dramabox API Server is LIVE!`);
-    console.log(`========================================`);
-    console.log(`🚀 Server running on port ${port} `);
-    console.log(`👉 Test: http://localhost:${port}/api/ping`);
-    console.log(`========================================\n`);
+app.listen(Number(port), "0.0.0.0", () => {
+    console.log("\n========================================");
+    console.log("  Jridev Dramabox API Server is LIVE!");
+    console.log("========================================");
+    console.log("🚀 Server running on port " + port);
+    console.log("👉 Test: http://localhost:" + port + "/api/ping?apikey=" + FAST_API_KEY);
+    console.log("========================================\n");
 });
