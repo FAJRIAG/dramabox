@@ -23,7 +23,7 @@
     "build:browser:prod": "esbuild src/Dramabox.ts --bundle --platform=node --target=es2020 --minify --outfile=dist/javascript/browser.min.js --global-name=DramaboxScraper",
     "clean": "rimraf dist",
     "test": "npm run build",
-    "start": "node dist/esm/server.js",
+    "start": "node dist/cjs/server.js",
     "dev": "ts-node src/server.ts",
     "prepublishOnly": "npm run build && npm test",
     "lint": "eslint src/**/*.ts",
