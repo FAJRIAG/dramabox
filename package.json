@@ -23,6 +23,8 @@
     "build:browser:prod": "esbuild src/Dramabox.ts --bundle --platform=node --target=es2020 --minify --outfile=dist/javascript/browser.min.js --global-name=DramaboxScraper",
     "clean": "rimraf dist",
     "test": "npm run build",
+    "start": "node dist/esm/server.js",
+    "dev": "ts-node src/server.ts",
     "prepublishOnly": "npm run build && npm test",
     "lint": "eslint src/**/*.ts",
     "format": "prettier --write \"src/**/*.ts\""
@@ -55,6 +57,9 @@
     "@typescript-eslint/parser": "^8.51.0",
     "axios": "^1.13.2",
     "cheerio": "^1.1.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
     "https-proxy-agent": "^7.0.6",
     "node-cache": "^5.1.2",
     "socks-proxy-agent": "^8.0.5"
@@ -62,10 +67,13 @@
   "devDependencies": {
     "@types/axios": "^0.9.36",
     "@types/cheerio": "^0.22.35",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
     "esbuild": "^0.27.2",
     "eslint": "^9.39.2",
     "prettier": "^3.7.4",
     "rimraf": "^6.1.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "publishConfig": {
