@@ -1091,16 +1091,19 @@ export class DramaboxScraper {
                 }
 
                 let currentIdx = 6;
-                while (currentIdx <= totalChapters) {
+                // Loop until the API returns no more chapters (not stopped by chapterCount which may be per-batch)
+                const maxIdx = Math.max(totalChapters + 10, 200); // Safety cap to avoid infinite loop
+                while (currentIdx <= maxIdx) {
                     const batchData = await fetchBatch(currentIdx);
                     const items = batchData?.data?.chapterList || [];
                     if (items.length > 0) {
                         result.push(...items);
                         currentIdx += 5;
                     } else {
-                        currentIdx += 5;
+                        // No more data returned - we've fetched everything
+                        break;
                     }
-                    await this.delay(1000);
+                    await this.delay(500);
                 }
             }
 
