@@ -560,37 +560,97 @@ export class DramaboxScraper {
                 return this.buildResponse(false, null, 'Book ID is required');
             }
 
-            // Route to V2 as the old V1 endpoint is highly unstable with new Book IDs
-            const v2Response = await this.getDramaDetailV2(bookId);
-            if (!v2Response.success) {
-                return v2Response;
-            }
-
-            const cacheKey = `detail_v1_mapped_${bookId}_${this.language}`;
+            const cacheKey = `detail_${bookId}_${this.language}`;
             const cached = this.cache.get(cacheKey);
             if (cached) {
                 return this.buildResponse(true, cached);
             }
 
-            // Map V2 response back to expected V1 structure for backward compatibility
-            const bookData = v2Response.data?.drama || {};
+            const data = await this.request('/drama-box/chapterv2/detail', {
+                needRecommend: true,
+                from: 'book_album',
+                bookId,
+            });
+
+            const bookData = data?.data?.book;
+            if (!data?.success || !bookData) {
+                // If V1 fails, fallback to V2 mapping just in case
+                const v2Response = await this.getDramaDetailV2(bookId);
+                if (v2Response.success && v2Response.data?.drama) {
+                    const v2Book = v2Response.data.drama;
+                    const detail: DramaDetail = {
+                        bookId: v2Book.bookId,
+                        bookName: v2Book.name,
+                        coverWap: v2Book.cover,
+                        introduction: v2Book.introduction,
+                        tagV3s: v2Book.tags || [],
+                        chapterCount: v2Book.episodeCount,
+                        playCount: v2Book.playCount,
+                        isEnd: v2Book.isEnd ? 1 : 0,
+                        payChapterNum: 0,
+                        totalEpisodes: v2Book.episodeCount,
+                        corner: undefined,
+                    };
+                    return this.buildResponse(true, { detail, recommendations: [] });
+                }
+
+                // Final Safety Fallback: Some localized IDs have no detail data at all but do have chapters
+                try {
+                    const chapRes = await this.getChapters(bookId);
+                    if (chapRes.success && chapRes.data?.chapters?.length > 0) {
+                        const count = chapRes.data.chapters.length;
+                        const detail: DramaDetail = {
+                            bookId: bookId,
+                            bookName: `Localized Drama [${bookId}]`,
+                            coverWap: '',
+                            introduction: 'Details unavailable for this localized book ID.',
+                            tagV3s: [],
+                            chapterCount: count,
+                            playCount: 0,
+                            isEnd: 0,
+                            payChapterNum: 0,
+                            totalEpisodes: count,
+                            corner: undefined,
+                        };
+                        return this.buildResponse(true, { detail, recommendations: [] });
+                    }
+                } catch (e) {
+                    // Ignore and let it fall through to Drama not found
+                }
+
+                return this.buildResponse(false, null, 'Drama not found');
+            }
+
             const detail: DramaDetail = {
                 bookId: bookData.bookId,
-                bookName: bookData.name,
-                coverWap: bookData.cover,
+                bookName: bookData.bookName,
+                coverWap: bookData.coverWap,
                 introduction: bookData.introduction,
-                tagV3s: bookData.tags || [],
-                chapterCount: bookData.episodeCount,
+                tagV3s: bookData.tagV3s || [],
+                chapterCount: bookData.chapterCount,
                 playCount: bookData.playCount,
-                isEnd: bookData.isEnd ? 1 : 0,
-                payChapterNum: 0,
-                totalEpisodes: bookData.episodeCount,
-                corner: undefined,
+                isEnd: bookData.isEnd,
+                payChapterNum: bookData.payChapterNum,
+                totalEpisodes: bookData.totalEpisodes,
+                corner: bookData.corner,
             };
+
+            const recommendList = data?.data?.recommendList?.records || [];
+            const recommendations: DramaItem[] = recommendList.map((item: any) => ({
+                bookId: item.bookId,
+                bookName: item.bookName,
+                cover: item.cover,
+                coverWap: item.coverWap,
+                introduction: item.introduction,
+                chapterCount: item.chapterCount,
+                playCount: item.playCount,
+                tagV3s: item.tagV3s || [],
+                corner: item.corner,
+            }));
 
             const responseData = {
                 detail,
-                recommendations: []
+                recommendations
             };
 
             this.cache.set(cacheKey, responseData, 600);
