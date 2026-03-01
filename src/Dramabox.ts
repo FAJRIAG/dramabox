@@ -1074,6 +1074,11 @@ export class DramaboxScraper {
                     });
                     return data;
                 } catch (error: any) {
+                    const msg = (error?.message || '').toLowerCase();
+                    // If the API says the chapter doesn't exist, treat as end-of-data (not a real error)
+                    if (msg.includes('章节不存在') || msg.includes('chapterv2/batch/load') || msg.includes('not found')) {
+                        return null; // Signal: no more chapters at this index
+                    }
                     if (retryCount < 2) {
                         await this.delay(2000);
                         return fetchBatch(index, retryCount + 1);
@@ -1095,6 +1100,7 @@ export class DramaboxScraper {
                 const maxIdx = Math.max(totalChapters + 10, 200); // Safety cap to avoid infinite loop
                 while (currentIdx <= maxIdx) {
                     const batchData = await fetchBatch(currentIdx);
+                    if (!batchData) break; // null = chapter-not-found = end of data
                     const items = batchData?.data?.chapterList || [];
                     if (items.length > 0) {
                         result.push(...items);
