@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { DramaboxScraper } from './Dramabox';
+import { DramaboxScraper } from './Dramabox.js';
 
 dotenv.config();
 
