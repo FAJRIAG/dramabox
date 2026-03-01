@@ -59,88 +59,280 @@ const apiDocHTML = `
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f6f9; }
         h1 { color: #1e293b; border-bottom: 3px solid #3b82f6; padding-bottom: 10px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
         h2 { color: #2563eb; margin-top: 35px; border-left: 4px solid #3b82f6; padding-left: 10px; }
-        .alert { background: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 15px; border-radius: 6px; margin-bottom: 25px; font-weight: 500; }
-        .endpoint { background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s; }
-        .endpoint:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        .method { display: inline-block; background: #10b981; color: white; padding: 4px 10px; border-radius: 4px; font-weight: 700; font-size: 0.85em; margin-right: 12px; letter-spacing: 0.5px; }
-        .path { font-family: 'Courier New', Courier, monospace; font-size: 1.15em; color: #dc2626; font-weight: 600; }
-        .desc { margin-top: 12px; color: #475569; font-size: 0.95em; }
-        .params { margin-top: 15px; background: #f8fafc; padding: 12px; border-radius: 6px; font-size: 0.9em; border: 1px solid #e2e8f0; border-left: 3px solid #cbd5e1; }
-        .params strong { color: #1e293b; }
-        code { background: #e2e8f0; color: #0f172a; padding: 2px 6px; border-radius: 4px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.9em; font-weight: 500; }
+        .endpoint { background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 12px; box-shadow: 0 2px 4px -1px rgba(0,0,0,0.04); overflow: hidden; }
+        .ep-header { display: flex; align-items: center; padding: 14px 18px; cursor: pointer; gap: 12px; user-select: none; background: #fff; border: none; width: 100%; text-align: left; }
+        .ep-header:hover { background-color: #f8faff; }
+        .ep-body { display: none; border-top: 1px solid #e2e8f0; background: #fafbfd; padding: 18px 20px; }
+        .ep-body.open { display: block; }
+        .method-get { display: inline-block; background: #61affe; color: white; padding: 5px 12px; border-radius: 4px; font-weight: 700; font-size: 0.8em; min-width: 60px; text-align: center; }
+        .ep-path { font-family: 'Courier New', monospace; font-size: 1em; font-weight: 600; color: #1a1a1a; flex: 1; }
+        .ep-title { color: #555; font-size: 0.9em; }
+        .ep-desc { color: #475569; font-size: 0.9em; margin-bottom: 16px; }
+        .chevron { margin-left: auto; color: #888; font-size: 0.75em; transition: transform 0.2s; }
+        .ep-header.active .chevron { transform: rotate(180deg); }
+        .params-title { font-weight: 700; font-size: 0.95em; border-bottom: 3px solid #4990e2; color: #2c3e50; padding-bottom: 4px; margin-bottom: 12px; display: inline-block; }
+        .param-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+        .param-table th { text-align: left; font-weight: 700; font-size: 0.82em; color: #444; padding: 6px 8px; border-bottom: 1px solid #e2e8f0; }
+        .param-table td { padding: 8px 8px; border-bottom: 1px solid #f0f4f8; vertical-align: top; font-size: 0.88em; }
+        .param-name { font-weight: 700; color: #212529; }
+        .param-type { color: #777; font-size: 0.78em; }
+        .param-req { color: #e74c3c; font-size: 0.78em; font-style: italic; }
+        .param-input { width: 100%; padding: 7px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9em; box-sizing: border-box; }
+        .btn-execute { width: 100%; padding: 12px; background: #4990e2; color: white; border: none; border-radius: 5px; font-size: 1em; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        .btn-execute:hover { background: #3476c8; }
+        .btn-cancel { float: right; padding: 4px 12px; background: white; color: #e74c3c; border: 1px solid #e74c3c; border-radius: 4px; font-size: 0.85em; cursor: pointer; }
+        .response-area { margin-top: 14px; }
+        .response-label { font-weight: 700; font-size: 0.82em; color: #444; margin-bottom: 6px; }
+        pre.response-box { background: #1e1e2e; color: #cdd6f4; padding: 14px; border-radius: 6px; overflow-x: auto; font-size: 0.8em; white-space: pre-wrap; word-break: break-all; max-height: 350px; display: none; }
+        .badge { background: #3b82f6; color: white; font-size: 0.7em; padding: 3px 8px; border-radius: 4px; vertical-align: middle; margin-left: 8px; }
         footer { margin-top: 60px; text-align: center; color: #64748b; font-size: 0.9em; border-top: 1px solid #e2e8f0; padding-top: 20px; }
-        .badge { background: #3b82f6; color: white; font-size: 0.7em; padding: 3px 6px; border-radius: 4px; vertical-align: middle; margin-left: 10px; }
     </style>
 </head>
 <body>
     <h1>🎬 API Jridev Dramabox <span class="badge">v1.2 Swagger</span></h1>
-    <p>Selamat datang di Server API Publik Jridev Dramabox. Server ini menyediakan aliran data langsung dari database untuk film dan episode pendek secara <i>real-time</i>.</p>
+    <p>Selamat datang di Server API Publik Jridev Dramabox. Klik salah satu endpoint di bawah untuk mencoba langsung.</p>
 
-    <h2>🌟 Dokumentasi Endpoints /dramabox</h2>
-    
+    <h2>🌟 Dramabox Endpoints</h2>
+
+    <!-- FORYOU -->
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/dramabox/foryou</span>
-        <div class="desc"><strong>For You (Untukmu)</strong> - Mengambil daftar drama rekomendasi untuk pengguna.</div>
-        <div class="params"><strong>Parameters:</strong> <code>page</code> (integer, query) - Nomor halaman, default 1</div>
+        <button class="ep-header" onclick="toggleEp(this)">
+            <span class="method-get">GET</span>
+            <span class="ep-path">/dramabox/foryou</span>
+            <span class="ep-title">For You (Untukmu)</span>
+            <span class="chevron">▼</span>
+        </button>
+        <div class="ep-body">
+            <div class="ep-desc">Mengambil daftar drama rekomendasi untuk pengguna.</div>
+            <button class="btn-cancel" onclick="toggleEp(this.closest('.ep-body').previousElementSibling)">Cancel</button>
+            <span class="params-title">Parameters</span>
+            <table class="param-table">
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr>
+                    <td><div class="param-name">page</div><div class="param-type">integer (query)</div></td>
+                    <td><div>Nomor halaman, default 1</div><input class="param-input" id="foryou_page" placeholder="page"></td>
+                </tr>
+            </table>
+            <button class="btn-execute" onclick="execApi('/dramabox/foryou', {page: document.getElementById('foryou_page').value}, 'foryou_res')">Execute</button>
+            <div class="response-area"><div class="response-label">Response:</div><pre class="response-box" id="foryou_res"></pre></div>
+        </div>
     </div>
 
+    <!-- VIP -->
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/dramabox/vip</span>
-        <div class="desc"><strong>Halaman VIP</strong> - Mengambil daftar drama di halaman VIP khusus akun berbayar.</div>
-        <div class="params"><strong>Parameters:</strong> No parameters</div>
+        <button class="ep-header" onclick="toggleEp(this)">
+            <span class="method-get">GET</span>
+            <span class="ep-path">/dramabox/vip</span>
+            <span class="ep-title">Halaman VIP</span>
+            <span class="chevron">▼</span>
+        </button>
+        <div class="ep-body">
+            <div class="ep-desc">Mengambil daftar drama di halaman VIP.</div>
+            <button class="btn-cancel" onclick="toggleEp(this.closest('.ep-body').previousElementSibling)">Cancel</button>
+            <span class="params-title">Parameters</span>
+            <p style="color:#888;font-size:0.85em">No parameters</p>
+            <button class="btn-execute" onclick="execApi('/dramabox/vip', {}, 'vip_res')">Execute</button>
+            <div class="response-area"><div class="response-label">Response:</div><pre class="response-box" id="vip_res"></pre></div>
+        </div>
     </div>
 
+    <!-- DUBINDO -->
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/dramabox/dubindo</span>
-        <div class="desc"><strong>Ambil list drama dub indo</strong> - Mengambil list drama dub indo dari kategori terpopuler atau terbaru.</div>
-        <div class="params"><strong>Parameters:</strong> <br><code>classify</code> (string, query) - "terpopuler" atau "terbaru"<br><code>page</code> (integer, query) - Nomor halaman, default 1</div>
-    </div>
-    
-    <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/dramabox/randomdrama</span>
-        <div class="desc"><strong>Random Drama Video</strong> - Mengambil video drama secara acak (For You Versi Video).</div>
-        <div class="params"><strong>Parameters:</strong> No parameters</div>
-    </div>
-
-    <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/dramabox/latest</span>
-        <div class="desc"><strong>Drama Terbaru</strong> - Mengambil daftar drama yang baru dirilis.</div>
-        <div class="params"><strong>Parameters:</strong> No parameters</div>
-    </div>
-
-    <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/dramabox/trending</span>
-        <div class="desc"><strong>Trending Drama</strong> - Mengambil daftar drama yang sedang populer.</div>
-        <div class="params"><strong>Parameters:</strong> No parameters</div>
-    </div>
-
-    <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/dramabox/populersearch</span>
-        <div class="desc"><strong>Pencarian Populer</strong> - Mengambil daftar kata kunci pencarian yang paling banyak dicari saat ini.</div>
-        <div class="params"><strong>Parameters:</strong> No parameters</div>
+        <button class="ep-header" onclick="toggleEp(this)">
+            <span class="method-get">GET</span>
+            <span class="ep-path">/dramabox/dubindo</span>
+            <span class="ep-title">Ambil list drama dub indo</span>
+            <span class="chevron">▼</span>
+        </button>
+        <div class="ep-body">
+            <div class="ep-desc">Mengambil list drama dub indo dari kategori terpopuler atau terbaru.</div>
+            <button class="btn-cancel" onclick="toggleEp(this.closest('.ep-body').previousElementSibling)">Cancel</button>
+            <span class="params-title">Parameters</span>
+            <table class="param-table">
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr>
+                    <td><div class="param-name">classify <span class="param-req">* required</span></div><div class="param-type">string (query)</div></td>
+                    <td><div>Classify = terpopuler atau terbaru</div><input class="param-input" id="dubindo_classify" placeholder="classify"></td>
+                </tr>
+                <tr>
+                    <td><div class="param-name">page</div><div class="param-type">integer (query)</div></td>
+                    <td><div>Nomor halaman.</div><input class="param-input" id="dubindo_page" placeholder="page"></td>
+                </tr>
+            </table>
+            <button class="btn-execute" onclick="execApi('/dramabox/dubindo', {classify: document.getElementById('dubindo_classify').value, page: document.getElementById('dubindo_page').value}, 'dubindo_res')">Execute</button>
+            <div class="response-area"><div class="response-label">Response:</div><pre class="response-box" id="dubindo_res"></pre></div>
+        </div>
     </div>
 
+    <!-- RANDOM DRAMA -->
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/dramabox/search</span>
-        <div class="desc"><strong>Cari Drama</strong> - Mencari drama berdasarkan judul atau kueri tertentu.</div>
-        <div class="params"><strong>Parameters:</strong> <code>query</code> * (string, query) - Kata kunci pencarian (contoh: pewaris)</div>
+        <button class="ep-header" onclick="toggleEp(this)">
+            <span class="method-get">GET</span>
+            <span class="ep-path">/dramabox/randomdrama</span>
+            <span class="ep-title">Random Drama Video</span>
+            <span class="chevron">▼</span>
+        </button>
+        <div class="ep-body">
+            <div class="ep-desc">Mengambil video drama secara acak (For You Versi Video).</div>
+            <button class="btn-cancel" onclick="toggleEp(this.closest('.ep-body').previousElementSibling)">Cancel</button>
+            <span class="params-title">Parameters</span>
+            <p style="color:#888;font-size:0.85em">No parameters</p>
+            <button class="btn-execute" onclick="execApi('/dramabox/randomdrama', {}, 'random_res')">Execute</button>
+            <div class="response-area"><div class="response-label">Response:</div><pre class="response-box" id="random_res"></pre></div>
+        </div>
     </div>
 
+    <!-- LATEST -->
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/dramabox/detail</span>
-        <div class="desc"><strong>Ambil Detail Drama</strong> - Mengambil detail drama dari bookId.</div>
-        <div class="params"><strong>Parameters:</strong> <code>bookId</code> * (string, query) - ID unik drama (contoh: 41000116666)</div>
+        <button class="ep-header" onclick="toggleEp(this)">
+            <span class="method-get">GET</span>
+            <span class="ep-path">/dramabox/latest</span>
+            <span class="ep-title">Drama Terbaru</span>
+            <span class="chevron">▼</span>
+        </button>
+        <div class="ep-body">
+            <div class="ep-desc">Mengambil daftar drama yang baru dirilis.</div>
+            <button class="btn-cancel" onclick="toggleEp(this.closest('.ep-body').previousElementSibling)">Cancel</button>
+            <span class="params-title">Parameters</span>
+            <p style="color:#888;font-size:0.85em">No parameters</p>
+            <button class="btn-execute" onclick="execApi('/dramabox/latest', {}, 'latest_res')">Execute</button>
+            <div class="response-area"><div class="response-label">Response:</div><pre class="response-box" id="latest_res"></pre></div>
+        </div>
     </div>
 
+    <!-- TRENDING -->
     <div class="endpoint">
-        <span class="method">GET</span> <span class="path">/dramabox/allepisode</span>
-        <div class="desc"><strong>Ambil Semua Episode</strong> - Mengambil link streaming MP4 untuk seluruh episode dari sebuah drama sekaligus (Batch). NOTE: Proses ini membutuhkan waktu yang lebih lama tergantung jumlah bab.</div>
-        <div class="params"><strong>Parameters:</strong> <code>bookId</code> * (string, query) - ID unik drama (contoh: 41000116666)</div>
+        <button class="ep-header" onclick="toggleEp(this)">
+            <span class="method-get">GET</span>
+            <span class="ep-path">/dramabox/trending</span>
+            <span class="ep-title">Trending Drama</span>
+            <span class="chevron">▼</span>
+        </button>
+        <div class="ep-body">
+            <div class="ep-desc">Mengambil daftar drama yang sedang populer.</div>
+            <button class="btn-cancel" onclick="toggleEp(this.closest('.ep-body').previousElementSibling)">Cancel</button>
+            <span class="params-title">Parameters</span>
+            <p style="color:#888;font-size:0.85em">No parameters</p>
+            <button class="btn-execute" onclick="execApi('/dramabox/trending', {}, 'trending_res')">Execute</button>
+            <div class="response-area"><div class="response-label">Response:</div><pre class="response-box" id="trending_res"></pre></div>
+        </div>
     </div>
 
-    <footer>
-        <p>⚡ Diciptakan dengan kecepatan oleh <strong>Jridev</strong> • Express API Engine</p>
-    </footer>
+    <!-- POPULERSEARCH -->
+    <div class="endpoint">
+        <button class="ep-header" onclick="toggleEp(this)">
+            <span class="method-get">GET</span>
+            <span class="ep-path">/dramabox/populersearch</span>
+            <span class="ep-title">Pencarian Populer</span>
+            <span class="chevron">▼</span>
+        </button>
+        <div class="ep-body">
+            <div class="ep-desc">Mengambil daftar kata kunci pencarian yang paling banyak dicari.</div>
+            <button class="btn-cancel" onclick="toggleEp(this.closest('.ep-body').previousElementSibling)">Cancel</button>
+            <span class="params-title">Parameters</span>
+            <p style="color:#888;font-size:0.85em">No parameters</p>
+            <button class="btn-execute" onclick="execApi('/dramabox/populersearch', {}, 'populer_res')">Execute</button>
+            <div class="response-area"><div class="response-label">Response:</div><pre class="response-box" id="populer_res"></pre></div>
+        </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="endpoint">
+        <button class="ep-header" onclick="toggleEp(this)">
+            <span class="method-get">GET</span>
+            <span class="ep-path">/dramabox/search</span>
+            <span class="ep-title">Cari Drama</span>
+            <span class="chevron">▼</span>
+        </button>
+        <div class="ep-body">
+            <div class="ep-desc">Mencari drama berdasarkan judul atau kueri tertentu.</div>
+            <button class="btn-cancel" onclick="toggleEp(this.closest('.ep-body').previousElementSibling)">Cancel</button>
+            <span class="params-title">Parameters</span>
+            <table class="param-table">
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr>
+                    <td><div class="param-name">query <span class="param-req">* required</span></div><div class="param-type">string (query)</div></td>
+                    <td><div>Kata kunci pencarian (contoh: pewaris)</div><input class="param-input" id="search_query" placeholder="query"></td>
+                </tr>
+            </table>
+            <button class="btn-execute" onclick="execApi('/dramabox/search', {query: document.getElementById('search_query').value}, 'search_res')">Execute</button>
+            <div class="response-area"><div class="response-label">Response:</div><pre class="response-box" id="search_res"></pre></div>
+        </div>
+    </div>
+
+    <!-- DETAIL -->
+    <div class="endpoint">
+        <button class="ep-header" onclick="toggleEp(this)">
+            <span class="method-get">GET</span>
+            <span class="ep-path">/dramabox/detail</span>
+            <span class="ep-title">Ambil Detail Drama</span>
+            <span class="chevron">▼</span>
+        </button>
+        <div class="ep-body">
+            <div class="ep-desc">Mengambil detail drama dari bookId.</div>
+            <button class="btn-cancel" onclick="toggleEp(this.closest('.ep-body').previousElementSibling)">Cancel</button>
+            <span class="params-title">Parameters</span>
+            <table class="param-table">
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr>
+                    <td><div class="param-name">bookId <span class="param-req">* required</span></div><div class="param-type">string (query)</div></td>
+                    <td><div>ID unik drama (contoh: 41000116666)</div><input class="param-input" id="detail_bookid" placeholder="bookId"></td>
+                </tr>
+            </table>
+            <button class="btn-execute" onclick="execApi('/dramabox/detail', {bookId: document.getElementById('detail_bookid').value}, 'detail_res')">Execute</button>
+            <div class="response-area"><div class="response-label">Response:</div><pre class="response-box" id="detail_res"></pre></div>
+        </div>
+    </div>
+
+    <!-- ALL EPISODE -->
+    <div class="endpoint">
+        <button class="ep-header" onclick="toggleEp(this)">
+            <span class="method-get">GET</span>
+            <span class="ep-path">/dramabox/allepisode</span>
+            <span class="ep-title">Ambil Semua Episode</span>
+            <span class="chevron">▼</span>
+        </button>
+        <div class="ep-body">
+            <div class="ep-desc">Mengambil link streaming untuk seluruh episode dari sebuah drama.<br><strong>NOTE:</strong> Proses ini membutuhkan waktu tergantung jumlah episode.</div>
+            <button class="btn-cancel" onclick="toggleEp(this.closest('.ep-body').previousElementSibling)">Cancel</button>
+            <span class="params-title">Parameters</span>
+            <table class="param-table">
+                <tr><th>Name</th><th>Description</th></tr>
+                <tr>
+                    <td><div class="param-name">bookId <span class="param-req">* required</span></div><div class="param-type">string (query)</div></td>
+                    <td><div>ID unik drama (contoh: 41000116666)</div><input class="param-input" id="allep_bookid" placeholder="bookId"></td>
+                </tr>
+            </table>
+            <button class="btn-execute" onclick="execApi('/dramabox/allepisode', {bookId: document.getElementById('allep_bookid').value}, 'allep_res')">Execute</button>
+            <div class="response-area"><div class="response-label">Response:</div><pre class="response-box" id="allep_res"></pre></div>
+        </div>
+    </div>
+
+    <footer><p>⚡ Diciptakan dengan kecepatan oleh <strong>Jridev</strong> • Express API Engine</p></footer>
+
+    <script>
+        function toggleEp(btn) {
+            const body = btn.nextElementSibling;
+            const isOpen = body.classList.contains('open');
+            document.querySelectorAll('.ep-body.open').forEach(b => { b.classList.remove('open'); b.previousElementSibling.classList.remove('active'); });
+            if (!isOpen) { body.classList.add('open'); btn.classList.add('active'); }
+        }
+        async function execApi(path, params, responseId) {
+            const el = document.getElementById(responseId);
+            el.style.display = 'block';
+            el.textContent = 'Loading...';
+            const filtered = Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== '' && v !== null));
+            const qs = new URLSearchParams(filtered).toString();
+            const url = path + (qs ? '?' + qs : '');
+            try {
+                const r = await fetch(url);
+                const data = await r.json();
+                el.textContent = JSON.stringify(data, null, 2);
+            } catch (e) {
+                el.textContent = 'Error: ' + e.message;
+            }
+        }
+    </script>
 </body>
 </html>
 `;
