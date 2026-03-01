@@ -551,7 +551,10 @@ async function startServer() {
         const res = await axios.get(tokenUrl, { timeout: 10000 });
         const { token, deviceid, androidid } = res.data as any;
         if (token && deviceid && androidid) {
-            scraper.injectToken(token, deviceid, androidid);
+            // Token from the URL is base64-encoded - decode it to get the real JWT
+            const decodedToken = Buffer.from(token, 'base64').toString('utf-8');
+            console.log('\ud83d\udd0d Token type: ' + (decodedToken.startsWith('eyJ') ? 'JWT \u2705' : 'Unknown format'));
+            scraper.injectToken(decodedToken, deviceid, androidid);
         } else {
             console.log('⚠️  Token response format unexpected, using auto-generated token');
         }
