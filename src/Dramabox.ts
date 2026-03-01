@@ -576,15 +576,15 @@ export class DramaboxScraper {
             const bookData = v2Response.data;
             const detail: DramaDetail = {
                 bookId: bookData.bookId,
-                bookName: bookData.bookName,
+                bookName: bookData.name,
                 coverWap: bookData.cover,
                 introduction: bookData.introduction,
                 tagV3s: bookData.tags || [],
-                chapterCount: bookData.totalEpisodes,
+                chapterCount: bookData.episodeCount,
                 playCount: bookData.playCount,
                 isEnd: bookData.isEnd ? 1 : 0,
                 payChapterNum: 0,
-                totalEpisodes: bookData.totalEpisodes,
+                totalEpisodes: bookData.episodeCount,
                 corner: undefined,
             };
 
